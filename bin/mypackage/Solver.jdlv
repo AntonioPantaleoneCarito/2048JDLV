@@ -1,0 +1,192 @@
+package mypackage;
+
+import mypackage.Board.Tile;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Solver
+{
+	private int MAX_INT=131072;
+	private int MAX_SCORE=59577;
+	
+	public List<Fact> facts=new ArrayList<Fact>();
+	public List<String> res=new ArrayList<String>();
+
+	Solver(){}
+	
+	Solver(Move m){
+		facts.clear();
+		res.clear();
+		
+		facts.add(generateFactS(m.getGridUP(),m.getScoreUP(),"UP"));
+		facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(),"DOWN"));
+		facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(),"LEFT"));
+		facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(),"RIGHT"));
+		res.add(DLV());
+	}
+	
+	public String DLV()
+	{
+		<#(newProgram)
+			EXE="./dlv.mingw-odbc.exe";
+			
+			IN =facts::Grid;
+			OUT=res::Best;
+			
+
+			
+			//Guess
+			Best(M) v notBest(M) :- Grid(E,TWO,FOUR,EIGHT,SIXTEEN,THIRTYTWO,SIXTYFOUR,ONEHUNDREDTWENTYEIGHT,TWOHUNDREDFIFTYSIX,FIVEHUNDREDTWELVE,ONETHOUSANDTWENTYFOUR,TWOTHOUSANDFOURTHYEIGHT,M,V).
+			
+			NotEmptyCell(NEC,M) :- NEC = #sum {A,B,C,D,E,F,G,H,I,L : Grid(_,A,B,C,D,E,F,G,H,I,L,_,M,_)}.
+			
+			//Check
+			:-#count{M:Best(M)} > 1. //Esiste solo una mossa BEST
+
+			//WEAK di Massimizzazione
+			:~ Best(M), Grid(_,TWO,FOUR,EIGHT,SIXTEEN,THIRTYTWO,SIXTYFOUR,ONEHUNDREDTWENTYEIGHT,TWOHUNDREDFIFTYSIX,FIVEHUNDREDTWELVE,ONETHOUSANDTWENTYFOUR,TWOTHOUSANDFOURTHYEIGHT,M,_),NotEmptyCell(NEC,M). [NEC:13] //Massimizza celle vuote, minimizzando tutto il resto
+			//:~ Best(M), Grid(_,_,_,_,_,_,_,_,_,_,_,_,M,V). Z=MAX_SCORE-V [Z:1] // Massimizza Punteggio, sottraendo questo dal MASSIMO PUNTEGGIO TOTALIZZABILE
+		
+			//WEAK di Minimizzazione
+			:~Best(M),Grid(_,TWO,_,_,_,_,_,_,_,_,_,_,M,_). [TWO:12] //Minimizza celle TWO
+			:~Best(M),Grid(_,_,FOUR,_,_,_,_,_,_,_,_,_,M,_). [FOUR:11] //Minimizza celle FOUR
+			:~Best(M),Grid(_,_,EIGHT,_,_,_,_,_,_,_,_,_,M,_). [EIGHT:10] //Minimizza celle EIGHT
+			:~Best(M),Grid(_,_,_,SIXTEEN,_,_,_,_,_,_,_,_,M,_). [SIXTEEN:9] //Minimizza celle SIXTEEN
+			:~Best(M),Grid(_,_,_,_,THIRTYTWO,_,_,_,_,_,_,_,M,_). [THIRTYTWO:8] //Minimizza celle THIRTYTWO
+			:~Best(M),Grid(_,_,_,_,_,_,SIXTYFOUR,_,_,_,_,_,M,_). [SIXTYFOUR:7] //Minimizza celle SIXTYFOUR
+			:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDREDTWENTYEIGHT:6] //Minimizza celle ONEHUNDREDTWENTYEIGHT
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,TWOHUNDREDFIFTYSIX,_,_,_,M,_). [TWOHUNDREDFIFTYSIX:5] //Minimizza celle TWOHUNDREDFIFTYSIX
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,FIVEHUNDREDTWELVE,_,_,M,_). [FIVEHUNDREDTWELVE:4] //Minimizza celle FIVEHUNDREDTWELVE
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,ONETHOUSANDTWENTYFOUR,_,M,_). [ONETHOUSANDTWENNTYFOUR:3] //Minimizza celle ONETHOUSANDTWENTYFOUR
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:2] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
+		
+		#>
+		
+		if_no_answerset{
+			res.clear();
+			System.out.println("No Answer Set");
+			res.add("noAS");
+		}
+		
+		if(res.get(0)!= "noAS" || res.size()!=0)
+			System.out.println("Mossa scelta "+res);
+			
+		return res.get(0);
+		
+	}
+	
+	
+	public Fact generateFactS(int values[][], int score, String m) 
+	{
+		int E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO, SIXTYFOUR,
+			ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX, FIVEHUNDREDTWELVE,
+			ONETHOUSANDTWENTYFOUR, TWOTHOUSANDFOURTHYEIGHT, V;
+		String M;
+		
+		E = 0;
+		TWO = 0;
+		FOUR = 0;
+		EIGHT = 0;
+		SIXTEEN = 0;
+		THIRTYTWO = 0;
+		SIXTYFOUR = 0;
+		ONEHUNDREDTWENTYEIGHT = 0;
+		TWOHUNDREDFIFTYSIX = 0;
+		FIVEHUNDREDTWELVE = 0;
+		ONETHOUSANDTWENTYFOUR = 0;
+		TWOTHOUSANDFOURTHYEIGHT = 0;
+		V = score;
+		M = m;
+ 
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++) {
+				/*if(values[i][j]== 0)
+				{
+					E++;
+				}
+				if(values[i][j]==2)
+				{
+					TWO++;
+				}
+				if(values[i][j]==4)
+				{ 
+					FOUR++;
+				}
+				if(values[i][j]==8)
+				{ 
+					EIGHT++;
+				}else if(values[i][j]==16)
+				{ 
+					
+				}else if(values[i][j]==32)
+				{
+					
+				}else if(values[i][j]==64)
+				{
+					
+				}else if(values[i][j]==128)
+				{
+					
+				}else if(values[i][j]==256)
+				{
+					
+				}else if(values[i][j]==512)
+				{
+					
+				}else if(values[i][j]==1024)
+				{
+					
+				}else if(values[i][j]==2048)
+				{
+					
+				}
+					
+				*/switch (values[i][j]) {
+				case 0: E++;
+					break;
+				case 2:
+					TWO++;
+					break;
+				case 4:
+					FOUR++;
+					break;
+				case 8:
+					EIGHT++;
+					break;
+				case 16:
+					SIXTEEN++;
+					break;
+				case 32:
+					THIRTYTWO++;
+					break;
+				case 64:
+					SIXTYFOUR++;
+					break;
+				case 128:
+					ONEHUNDREDTWENTYEIGHT++;
+					break;
+				case 256:
+					TWOHUNDREDFIFTYSIX++;
+					break;
+				case 512:
+					FIVEHUNDREDTWELVE++;
+					break;
+				case 1024:
+					ONETHOUSANDTWENTYFOUR++;
+					break;
+				case 2048:
+					TWOTHOUSANDFOURTHYEIGHT++;
+					break;
+					
+			}
+		}
+	}
+	return new Fact(E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO,
+		SIXTYFOUR, ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX,
+		FIVEHUNDREDTWELVE, ONETHOUSANDTWENTYFOUR,
+		TWOTHOUSANDFOURTHYEIGHT, V, M);
+	
+	
+}	
+}
