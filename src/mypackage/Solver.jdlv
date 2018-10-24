@@ -38,27 +38,25 @@ public class Solver
 			//Guess
 			Best(M) v notBest(M) :- Grid(E,TWO,FOUR,EIGHT,SIXTEEN,THIRTYTWO,SIXTYFOUR,ONEHUNDREDTWENTYEIGHT,TWOHUNDREDFIFTYSIX,FIVEHUNDREDTWELVE,ONETHOUSANDTWENTYFOUR,TWOTHOUSANDFOURTHYEIGHT,M,V).
 			
-			NotEmptyCell(NEC,M) :- NEC = #sum {A,B,C,D,E,F,G,H,I,L : Grid(_,A,B,C,D,E,F,G,H,I,L,_,M,_)}.
+		//	NotEmptyCell(NEC,M) :- NEC = #sum {A,B,C,D,E,F,G,H,I,L : Grid(_,A,B,C,D,E,F,G,H,I,L,_,M,_)}.
 			
 			//Check
-			:-#count{M:Best(M)} > 1. //Esiste solo una mossa BEST
-
-			//WEAK di Massimizzazione
-			:~ Best(M), Grid(_,TWO,FOUR,EIGHT,SIXTEEN,THIRTYTWO,SIXTYFOUR,ONEHUNDREDTWENTYEIGHT,TWOHUNDREDFIFTYSIX,FIVEHUNDREDTWELVE,ONETHOUSANDTWENTYFOUR,TWOTHOUSANDFOURTHYEIGHT,M,_),NotEmptyCell(NEC,M). [NEC:13] //Massimizza celle vuote, minimizzando tutto il resto
-			//:~ Best(M), Grid(_,_,_,_,_,_,_,_,_,_,_,_,M,V). Z=MAX_SCORE-V [Z:1] // Massimizza Punteggio, sottraendo questo dal MASSIMO PUNTEGGIO TOTALIZZABILE
+			:-#count{M:Best(M)} = 0. //Esiste sempre una mossa Best
+			:-#count {M:Best(M)} > 1. //Esiste una sola mossa Best
 		
 			//WEAK di Minimizzazione
 			:~Best(M),Grid(_,TWO,_,_,_,_,_,_,_,_,_,_,M,_). [TWO:12] //Minimizza celle TWO
 			:~Best(M),Grid(_,_,FOUR,_,_,_,_,_,_,_,_,_,M,_). [FOUR:11] //Minimizza celle FOUR
-			:~Best(M),Grid(_,_,EIGHT,_,_,_,_,_,_,_,_,_,M,_). [EIGHT:10] //Minimizza celle EIGHT
-			:~Best(M),Grid(_,_,_,SIXTEEN,_,_,_,_,_,_,_,_,M,_). [SIXTEEN:9] //Minimizza celle SIXTEEN
-			:~Best(M),Grid(_,_,_,_,THIRTYTWO,_,_,_,_,_,_,_,M,_). [THIRTYTWO:8] //Minimizza celle THIRTYTWO
+			:~Best(M),Grid(_,_,_,EIGHT,_,_,_,_,_,_,_,_,M,_). [EIGHT:10]//Minimizza celle EIGHT
+			:~Best(M),Grid(_,_,_,_,SIXTEEN,_,_,_,_,_,_,_,M,_). [SIXTEEN:9]//Minimizza celle SIXTEEN
+			:~Best(M),Grid(_,_,_,_,_,THIRTYTWO,_,_,_,_,_,_,M,_). [THIRTYTWO:8] //Minimizza celle THIRTYTWO
 			:~Best(M),Grid(_,_,_,_,_,_,SIXTYFOUR,_,_,_,_,_,M,_). [SIXTYFOUR:7] //Minimizza celle SIXTYFOUR
-			:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDREDTWENTYEIGHT:6] //Minimizza celle ONEHUNDREDTWENTYEIGHT
+			:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDERDTWENTYEIGHT:6] //Minimizza celle ONEHUNDREDTWENTYEIGHT
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,TWOHUNDREDFIFTYSIX,_,_,_,M,_). [TWOHUNDREDFIFTYSIX:5] //Minimizza celle TWOHUNDREDFIFTYSIX
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,FIVEHUNDREDTWELVE,_,_,M,_). [FIVEHUNDREDTWELVE:4] //Minimizza celle FIVEHUNDREDTWELVE
-			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,ONETHOUSANDTWENTYFOUR,_,M,_). [ONETHOUSANDTWENNTYFOUR:3] //Minimizza celle ONETHOUSANDTWENTYFOUR
-			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:2] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,ONETHOUSANDTWENTYFOUR,_,M,_). [ONETHOUSANDTWENTYFOUR:3] //Minimizza celle ONETHOUSANDTWENTYFOUR
+			:~Best(M),Grid(E,_,_,_,_,_,_,_,_,_,_,_,M,_). [E:2] //Minimizza celle EMPTY
+			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:1] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
 		
 		#>
 		
