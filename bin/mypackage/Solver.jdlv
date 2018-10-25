@@ -10,25 +10,27 @@ public class Solver
 	private int MAX_SCORE=59577;
 	
 	public List<Fact> facts=new ArrayList<Fact>();
-	public List<String> res=new ArrayList<String>();
+	public List<String> result=new ArrayList<String>();
 
 	Solver(){}
 	
 	Solver(Move m){
 		facts.clear();
-		res.clear();
+		result.clear();
 		
 		facts.add(generateFactS(m.getGridUP(),m.getScoreUP(),"UP"));
 		facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(),"DOWN"));
 		facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(),"LEFT"));
 		facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(),"RIGHT"));
-		res.add(DLV());
+		result.add(DLV());
 	}
 	
 	public String DLV()
 	{
+		List<String> res= new ArrayList<String>();
+		
 		for(Fact f : facts)
-			System.out.println(f);
+			System.out.println(f+".");
 		
 		
 		<#(newProgram)
@@ -36,6 +38,7 @@ public class Solver
 			
 			IN =facts::Grid;
 			OUT=res::Best;
+			
 			
 			//Grid(1,1,1,1,1,1,1,1,1,1,1,0,"test1",0).
 			//Grid(0,1,1,1,1,1,1,1,1,1,1,0,"test2",0).
@@ -74,19 +77,18 @@ public class Solver
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:1] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
 		
 		#>
-/* 	
 		if_no_answerset{
-			res.clear();
 			System.out.println("No Answer Set");
-			res.add("noAS");
-		}*/	
+			result.add("noAS");
+		}	
 		
 		if(res.size()!=0){
-			System.out.println("Mossa scelta "+res);
+			System.out.println("Mossa scelta "+res.get(0));
 			
 			return res.get(0);
 		}
-		return "NoAS";
+		
+		return "ALTRO";
 	}
 		
 	

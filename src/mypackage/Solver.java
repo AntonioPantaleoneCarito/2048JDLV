@@ -9,21 +9,22 @@ public  class Solver{
 private int MAX_INT= 131072 ;
 private int MAX_SCORE= 59577 ;
 public List<Fact> facts= new ArrayList<Fact>();
-public List<String> res= new ArrayList<String>();
+public List<String> result= new ArrayList<String>();
 Solver(){
 }
 Solver(Move m){
 facts.clear();
-res.clear();
+result.clear();
 facts.add(generateFactS(m.getGridUP(),m.getScoreUP(), "UP" ));
 facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(), "DOWN" ));
 facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(), "LEFT" ));
 facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
-res.add(DLV());
+result.add(DLV());
 }
 public String DLV(){
+List<String> res= new ArrayList<String>();
 for(Fact f:facts)
-System.out.println(f);
+System.out.println(f+ "." );
 
 	// ---- START - startProgram ---- 
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Creation newProgram JDLV module.");
@@ -74,6 +75,8 @@ it.unical.mat.jdlv.program.TypeSolver.loadPredicate(res, "Best",_temporary_JDLV_
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Process new answer_set"+ '\n' + "Results:"+ '\n'+ "res " + res.size() + " elements"+ '\n' + it.unical.mat.jdlv.program.JDLV_Logger.getInstance().getPrettyObject(res,0));
 }
 if(_JDLV_INVOCATION_newProgram.haveModel()==false){
+System.out.println( "No Answer Set" );
+result.add( "noAS" );
 }
 if(!_JDLV_INVOCATION_newProgram.getErrors().isEmpty()){
 throw new java.lang.RuntimeException(_JDLV_INVOCATION_newProgram.getErrors().get(0).getText());
@@ -87,10 +90,10 @@ _JDLV_PROGRAM_newProgram.cleanText();
 	// ---- END - prepareJDLVCall ---- 
 if(res.size()!= 0 )
 {
-System.out.println( "Mossa scelta " +res);
+System.out.println( "Mossa scelta " +res.get( 0 ));
 return res.get( 0 );
 }
-return  "NoAS" ;
+return  "ALTRO" ;
 }
 public Fact generateFactS(int values[][],int score,String m){
 int E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO, SIXTYFOUR, ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX, FIVEHUNDREDTWELVE, ONETHOUSANDTWENTYFOUR, TWOTHOUSANDFOURTHYEIGHT, V;

@@ -422,7 +422,7 @@ public class Board extends JPanel implements KeyListener {
 	{
 		Move m = new Move(tiles, score);
 		AI = new Solver(m);
-		System.out.println(AI.res.get(0));
+		System.out.println(AI.result.get(0));
 	
 	}
 	
