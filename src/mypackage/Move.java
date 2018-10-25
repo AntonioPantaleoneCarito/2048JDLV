@@ -45,25 +45,37 @@ public class Move {
 		scoreRIGHT=0;
 		
 		int index = 0;
-
+		System.out.println("Griglia Sorgente");
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				grid[i][j] = tTiles[index++].getValue();
+				System.out.print(grid[i][j]);
 			}
+			System.out.println();
 		}
 	}
 
 	public void createMoveUP() {
 		scoreUP = score;
-
+		System.out.println("CreateMoveUP");
 		for (int i = 0; i < 4; i++) {
 			int[] line = getCol(grid, i, Moves.UP);
 			int[] merged = mergeLine(moveLine(line), scoreUP);
 			setLine(Moves.UP, i, merged);
 		}
+		System.out.println("GrigliaUP Generata:");
+		for(int i=0;i<4;i++)
+		{
+			System.out.println();
+			for(int j=0;j<4;j++)
+				System.out.print(gridUP[i][j]);
+		}
+		System.out.println();
+
 	}
 
 	public void createMoveDOWN() {
+		System.out.println("CreateMoveDown");
 		scoreDOWN = score;
 
 		for (int i = 0; i < 4; i++) {
@@ -72,10 +84,22 @@ public class Move {
 			int[] merged = mergeLine(moveLine(line), scoreDOWN);
 			setLine(Moves.DOWN, i, merged);
 		}
+		
+		System.out.println("GrigliaDOWN Generata:");
+		for(int i=0;i<4;i++)
+		{
+			System.out.println();
+			for(int j=0;j<4;j++)
+				System.out.print(gridDOWN[i][j]);
+		}
+		System.out.println();
+
+		
 	}
 
 	public void createMoveLEFT() {
 		scoreLEFT = score;
+		System.out.println("CreateMoveLEFT");
 
 		for (int i = 0; i < 4; i++) {
 			int[] line = getRow(grid, i, Moves.LEFT);
@@ -83,10 +107,21 @@ public class Move {
 			int[] merged = mergeLine(moveLine(line), scoreLEFT);
 			setLine(Moves.LEFT, i, merged);
 		}
+		
+		System.out.println("GrigliaLEFT Generata:");
+		for(int i=0;i<4;i++)
+		{
+			System.out.println();
+			for(int j=0;j<4;j++)
+				System.out.print(gridLEFT[i][j]);
+		}
+		System.out.println();
+
 	}
 
 	public void createMoveRIGHT() {
 		scoreRIGHT = score;
+		System.out.println("CreateMoveRIGHT");
 
 		for (int i = 0; i < 4; i++) {
 			int[] line = getRow(grid, i, Moves.RIGHT);
@@ -94,9 +129,20 @@ public class Move {
 			int[] merged = mergeLine(moveLine(line), scoreRIGHT);
 			setLine(Moves.RIGHT, i, merged);
 		}
+		
+		System.out.println("GrigliaRIGHT Generata:");
+		for(int i=0;i<4;i++)
+		{
+			System.out.println();
+			for(int j=0;j<4;j++)
+				System.out.print(gridRIGHT[i][j]);
+		}
+		System.out.println();
+
 	}
 
 	private int[] getRow(int[][] source, int index, Moves m) {
+		System.out.println("GETRIGA di "+m+" indice ="+index);
 
 		int[] row = new int[4];
 
@@ -104,14 +150,24 @@ public class Move {
 			row = source[index];
 		} else if (m == Moves.RIGHT) {
 			int count = 0;
-			for (int i = 3; i <= 0; i--)
-				row[count++] = source[index][i];
+			for (int i = 3; i >= 0; i--){
+				row[count] = source[index][i];
+				count++;
 		}
+			}
+		
+		System.out.print("GetRow "+m+" Result: ");
+		for(int i=0;i<4;i++)
+			System.out.print(row[i]+" ");
+		System.out.println();
+		
 		return row;
 
 	}
 
 	private int[] getCol(int[][] source, int index, Moves m) {
+		
+		System.out.println("GETCOLONNA di "+m+" indice ="+index);
 		int[] col = new int[4];
 
 		if (m == Moves.UP) {
@@ -119,66 +175,103 @@ public class Move {
 				col[i] = source[i][index];
 		} else if (m == Moves.DOWN) {
 			int count = 0;
-			for (int i = 3; i <= 0; i--)
-				col[count++] = source[i][index];
+			for (int i = 3; i >= 0; i--){
+				col[count] = source[i][index];
+				count++;
+			}
 		}
+		System.out.print("GetCol "+m+" Result: ");
+		for(int i=0;i<4;i++)
+			System.out.print(col[i]+" ");
+		System.out.println();
+		
 		return col;
 	}
 
 	private int[] moveLine(int[] oldLine) {
-		System.out.println("moveLine dim oldLine->"+oldLine.length);
+		
+		System.out.print("MoveLine Input: ");
+		for(int i=0;i<4;i++)
+			System.out.print(oldLine[i]);
+		System.out.println();
 		
 		LinkedList<Integer> l = new LinkedList<Integer>();
 		for (int i = 0; i < 4; i++) {
 			if (!(oldLine[i] == 0))
-				l.addLast(oldLine[i]);
+			{
+				l.add(oldLine[i]);
+				System.out.println("MoveLine Aggiunge: " + oldLine[i]);
+			}
 		}
+		
 		if (l.size() == 0) {
 			return oldLine;
 		}else{
 			int[] newLine = new int[4];
-			for (int i = 0; i < l.size(); i++) {
-				newLine[i] = l.removeFirst().intValue();
+			for (int i = 0; i <= l.size(); i++) {
+				newLine[i] = l.remove().intValue();
+				System.out.println("MoveLine Rimuovo: "+newLine[i]);
 			}
+			System.out.print("MoveLine Result: ");
+			for(int i=0;i<4;i++)
+				System.out.print(newLine[i]);
+			System.out.println();
+			
 			return newLine;
 		}
 	}
 
 	private int[] mergeLine(int[] oldLine, int score) {
 		LinkedList<Integer> list = new LinkedList<Integer>();
+		
+		System.out.println("MergeLine Input: ");
+		for(int i=0;i<4;i++)
+			System.out.print(oldLine[i]);
+		System.out.println();
 
-		for (int i = 0; i < 4 && !(oldLine[i] == 0); i++) {
+		for (int i = 0; i < 4 && !(oldLine[i]==0); i++) {
 			int num = oldLine[i];
 			if (i < 3 && oldLine[i] == oldLine[i + 1]) {
+				System.out.println("Trovato confronto"+oldLine[i]+"  "+oldLine[i+1]);
 				num *= 2;
 				score += num;
+				i++;
 			}
-			i++;
+
 			list.add(new Integer(num));
 		}
 		if (list.size() == 0) {
+			System.out.println("Ritorno OLD");
 			return oldLine;
 		} else {
+			System.out.print("MergeLine Result: ");
+			for(Integer n : list)
+				System.out.print(n+" ");
+			System.out.println();
+			
+			
+			System.out.print("MergeLine Converted Result: ");
+			int temp[] = toArrayInt(list);
+			for(int i=0;i<4;i++)
+				System.out.print(temp[i]+" ");
+			System.out.println();
+			
 			return toArrayInt(list);
 		}
 	}
 
 	private void setLine(Moves m, int index, int[] re) {
-		System.out.println("setLine---> "+ index +" dim re--->"+re.length);
+		System.out.println(m+" setLine "+ index);
 		int count = 0;
 
 		switch (m) {
 		case UP:
 			for (int i=0;i<4;i++)
-			{
-				System.out.println("SetLine->caseUp-> i="+i+" index="+index+" re[0]="+re[0]+" re[1]="+re[1]+" re[2]="+re[2]+" re[3]="+re[3]);
 				gridUP[i][index] = re[i];
-				
-			}
 			break;
 		case DOWN:
 			count = 0;
-			for (int i = 3; i <= 0; i--)
+			for (int i = 3; i >= 0; i--)
 				gridDOWN[count++][index] = re[i];
 			break;
 		case LEFT:
@@ -187,7 +280,7 @@ public class Move {
 			break;
 		case RIGHT:
 			count = 0;
-			for (int i = 3; i <= 0; i--)
+			for (int i = 3; i >= 0; i--)
 				gridRIGHT[index][count++] = re[i];
 			break;
 		}

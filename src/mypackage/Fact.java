@@ -28,6 +28,14 @@ public Fact(int e, int tWO, int fOUR, int eIGHT, int sIXTEEN, int tHIRTYTWO,
 	M = m;
 }
 
+@Override
+public String toString()
+{
+	return "Grid("+E+","+TWO+","+FOUR+","+EIGHT+","+SIXTEEN+","+THIRTYTWO+","+SIXTYFOUR+","+ONEHUNDREDTWENTYEIGHT+","+TWOTHOUSANDFOURTHYEIGHT+","+V+","+M+")";
+			
+	
+}
+
 
 
 }

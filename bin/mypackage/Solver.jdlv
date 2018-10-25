@@ -27,18 +27,33 @@ public class Solver
 	
 	public String DLV()
 	{
+		for(Fact f : facts)
+			System.out.println(f);
+		
+		
 		<#(newProgram)
 			EXE="./dlv.mingw-odbc.exe";
 			
 			IN =facts::Grid;
 			OUT=res::Best;
 			
+			//Grid(1,1,1,1,1,1,1,1,1,1,1,0,"test1",0).
+			//Grid(0,1,1,1,1,1,1,1,1,1,1,0,"test2",0).
+			//Grid(0,0,1,1,1,1,1,1,1,1,1,0,"test3",0).
+			//Grid(0,0,0,1,1,1,1,1,1,1,1,0,"test4",0).
+			//Grid(0,0,0,0,1,1,1,1,1,1,1,0,"test5",0).
+			//Grid(0,0,0,0,0,1,1,1,1,1,1,0,"test6",0).
+			//Grid(0,0,0,0,0,0,1,1,1,1,1,0,"test7",0).
+			//Grid(0,0,0,0,0,0,0,1,1,1,1,0,"test8",0).
+			//Grid(0,0,0,0,0,0,0,0,1,1,1,0,"test9",0).
+			//Grid(0,0,0,0,0,0,0,0,0,1,1,0,"test10",0).
+			//Grid(0,0,0,0,0,0,0,0,0,0,1,0,"test11",0).
 
 			
 			//Guess
-			Best(M) v notBest(M) :- Grid(E,TWO,FOUR,EIGHT,SIXTEEN,THIRTYTWO,SIXTYFOUR,ONEHUNDREDTWENTYEIGHT,TWOHUNDREDFIFTYSIX,FIVEHUNDREDTWELVE,ONETHOUSANDTWENTYFOUR,TWOTHOUSANDFOURTHYEIGHT,M,V).
+			Best(M) | notBest(M) :- Grid(_,_,_,_,_,_,_,_,_,_,_,_,M,_).
 			
-		//	NotEmptyCell(NEC,M) :- NEC = #sum {A,B,C,D,E,F,G,H,I,L : Grid(_,A,B,C,D,E,F,G,H,I,L,_,M,_)}.
+		//NotEmptyCell(NEC,M) :- NEC = #sum {A,B,C,D,E,F,G,H,I,L : Grid(_,A,B,C,D,E,F,G,H,I,L,_,M,_)}.
 			
 			//Check
 			:-#count{M:Best(M)} = 0. //Esiste sempre una mossa Best
@@ -59,19 +74,22 @@ public class Solver
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:1] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
 		
 		#>
-		
+/* 	
 		if_no_answerset{
 			res.clear();
 			System.out.println("No Answer Set");
 			res.add("noAS");
-		}
+		}*/	
 		
-		if(res.get(0)!= "noAS" || res.size()!=0)
+		if(res.size()!=0){
 			System.out.println("Mossa scelta "+res);
 			
-		return res.get(0);
-		
+			return res.get(0);
+		}
+		return "NoAS";
 	}
+		
+	
 	
 	
 	public Fact generateFactS(int values[][], int score, String m) 

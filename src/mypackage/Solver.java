@@ -22,6 +22,8 @@ facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
 res.add(DLV());
 }
 public String DLV(){
+for(Fact f:facts)
+System.out.println(f);
 
 	// ---- START - startProgram ---- 
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Creation newProgram JDLV module.");
@@ -44,7 +46,7 @@ try{
 
 _JDLV_INVOCATION_newProgram=it.unical.mat.wrapper.DLVWrapper.getInstance().createInvocation("./dlv.mingw-odbc.exe");
 _JDLV_PROGRAM_newProgram.addText(_JDLV_PROGRAM_BUFFER_newProgram.toString());
-_JDLV_PROGRAM_newProgram.addText("Best(M) v notBest(M) :- Grid(E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO, SIXTYFOUR, ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX, FIVEHUNDREDTWELVE, ONETHOUSANDTWENTYFOUR, TWOTHOUSANDFOURTHYEIGHT, M, V)."+'\n');
+_JDLV_PROGRAM_newProgram.addText("Best(M) v notBest(M) :- Grid(_, _, _, _, _, _, _, _, _, _, _, _, M, _)."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} = 0."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} > 1."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, TWO, _, _, _, _, _, _, _, _, _, _, M, _). [TWO:12]"+'\n');
@@ -72,9 +74,6 @@ it.unical.mat.jdlv.program.TypeSolver.loadPredicate(res, "Best",_temporary_JDLV_
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Process new answer_set"+ '\n' + "Results:"+ '\n'+ "res " + res.size() + " elements"+ '\n' + it.unical.mat.jdlv.program.JDLV_Logger.getInstance().getPrettyObject(res,0));
 }
 if(_JDLV_INVOCATION_newProgram.haveModel()==false){
-res.clear();
-System.out.println( "No Answer Set" );
-res.add( "noAS" );
 }
 if(!_JDLV_INVOCATION_newProgram.getErrors().isEmpty()){
 throw new java.lang.RuntimeException(_JDLV_INVOCATION_newProgram.getErrors().get(0).getText());
@@ -86,9 +85,12 @@ it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logErrorMessage(_JDLV_EXCEP
 _JDLV_PROGRAM_newProgram.cleanText();
 
 	// ---- END - prepareJDLVCall ---- 
-if(res.get( 0 )!= "noAS" ||res.size()!= 0 )
+if(res.size()!= 0 )
+{
 System.out.println( "Mossa scelta " +res);
 return res.get( 0 );
+}
+return  "NoAS" ;
 }
 public Fact generateFactS(int values[][],int score,String m){
 int E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO, SIXTYFOUR, ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX, FIVEHUNDREDTWELVE, ONETHOUSANDTWENTYFOUR, TWOTHOUSANDFOURTHYEIGHT, V;
