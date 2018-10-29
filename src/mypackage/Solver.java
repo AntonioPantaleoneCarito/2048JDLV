@@ -3,6 +3,7 @@ package mypackage;
 import mypackage.Board.Tile;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.*;
 
 public  class Solver{
 
@@ -25,6 +26,7 @@ public String DLV(){
 List<String> res= new ArrayList<String>();
 for(Fact f:facts)
 System.out.println(f+ "." );
+writeFactsFile(facts);
 
 	// ---- START - startProgram ---- 
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Creation newProgram JDLV module.");
@@ -34,12 +36,6 @@ java.lang.StringBuffer _JDLV_PROGRAM_BUFFER_newProgram=new java.lang.StringBuffe
 it.unical.mat.wrapper.DLVInvocation _JDLV_INVOCATION_newProgram;
 
 	// ---- END - startProgram ---- 
-
-	// ---- START - addInMapping ---- 
-_JDLV_PROGRAM_newProgram.addText(it.unical.mat.jdlv.program.TypeSolver.getNameTranslation(facts,"Grid"));
-it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Add in-mapping 'facts::Grid' in module newProgram:"+ it.unical.mat.jdlv.program.JDLV_Logger.getInstance().getPrettyCode(it.unical.mat.jdlv.program.TypeSolver.getNameTranslation(facts,"Grid"), 0));
-
-	// ---- END - addInMapping ---- 
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Add out-mapping 'res::Best' in module newProgram.");
 
 	// ---- START - prepareJDLVCall ---- 
@@ -63,11 +59,12 @@ _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, _,
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(E, _, _, _, _, _, _, _, _, _, _, _, M, _). [E:2]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, _, _, TWOTHOUSANDFOURTHYEIGHT, M, _). [TWOTHOUSANDFOURTHYEIGHT:1]"+'\n');
 _JDLV_PROGRAM_newProgram.getFiles().clear();
+_JDLV_PROGRAM_newProgram.addFile("./facts.txt");
 _JDLV_INVOCATION_newProgram.setNumberOfModels(1);
 _JDLV_PROGRAM_BUFFER_newProgram.append("");
 _JDLV_INVOCATION_newProgram.setInputProgram(_JDLV_PROGRAM_newProgram);
 it.unical.mat.wrapper.ModelBufferedHandler _BUFFERED_HANDLER_newProgram=new it.unical.mat.wrapper.ModelBufferedHandler(_JDLV_INVOCATION_newProgram);
-it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Start execution newProgram program: executablePath='"+it.unical.mat.jdlv.util.JdlvProperties.getInstance().getDlvExecutablePath()+"', options='"+_JDLV_INVOCATION_newProgram.getOptionsString()+"'"+'\n'+"Code execution: "+it.unical.mat.jdlv.program.JDLV_Logger.getInstance().getPrettyCode(_JDLV_INVOCATION_newProgram.getInputProgram().getCompleteText(),0));
+it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Start execution newProgram program: executablePath='"+it.unical.mat.jdlv.util.JdlvProperties.getInstance().getDlvExecutablePath()+"', options='"+_JDLV_INVOCATION_newProgram.getOptionsString()+"'"+'\n'+"Code execution: "+it.unical.mat.jdlv.program.JDLV_Logger.getInstance().getPrettyCode(_JDLV_INVOCATION_newProgram.getInputProgram().getCompleteText(),0)+'\n'+"Files execution: ./facts.txt");
 _JDLV_INVOCATION_newProgram.run();
 while(_BUFFERED_HANDLER_newProgram.hasMoreModels()){
 it.unical.mat.wrapper.Model _temporary_JDLV_MODELnewProgram=_BUFFERED_HANDLER_newProgram.nextModel();
@@ -94,6 +91,21 @@ System.out.println( "Mossa scelta " +res.get( 0 ));
 return res.get( 0 );
 }
 return  "ALTRO" ;
+}
+public  void  writeFactsFile(List<Fact> source){
+try
+{
+FileOutputStream fos= new FileOutputStream( "./facts.txt" );
+PrintStream write= new PrintStream(fos);
+for(Fact f:source)
+{
+write.println(f+ "." );
+}
+}
+catch(IOException e){
+System.out.println( "Errore: " +e);
+System.exit( 1 );
+}
 }
 public Fact generateFactS(int values[][],int score,String m){
 int E, TWO, FOUR, EIGHT, SIXTEEN, THIRTYTWO, SIXTYFOUR, ONEHUNDREDTWENTYEIGHT, TWOHUNDREDFIFTYSIX, FIVEHUNDREDTWELVE, ONETHOUSANDTWENTYFOUR, TWOTHOUSANDFOURTHYEIGHT, V;

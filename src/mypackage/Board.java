@@ -22,8 +22,6 @@ public class Board extends JPanel implements KeyListener {
 
 	private boolean win, lose;
 	private int score;
-	private int scoreAI;
-
 	public Board() {
 		setPreferredSize(new Dimension(340, 400));
 		setFocusable(true);
@@ -422,8 +420,6 @@ public class Board extends JPanel implements KeyListener {
 	{
 		Move m = new Move(tiles, score);
 		AI = new Solver(m);
-		System.out.println(AI.result.get(0));
-	
 	}
 	
 	public void startAI()

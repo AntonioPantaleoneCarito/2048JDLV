@@ -3,6 +3,7 @@ package mypackage;
 import mypackage.Board.Tile;
 import java.util.List;
 import java.util.ArrayList;
+import java.io.*;
 
 public class Solver
 {
@@ -32,12 +33,14 @@ public class Solver
 		for(Fact f : facts)
 			System.out.println(f+".");
 		
+		writeFactsFile(facts);
+		
 		
 		<#(newProgram)
 			EXE="./dlv.mingw-odbc.exe";
-			
-			IN =facts::Grid;
-			OUT=res::Best;
+		//	IN = facts::Grid;
+			FILE = "./facts.txt";
+			OUT = res::Best;
 			
 			
 			//Grid(1,1,1,1,1,1,1,1,1,1,1,0,"test1",0).
@@ -91,7 +94,23 @@ public class Solver
 		return "ALTRO";
 	}
 		
-	
+	public void writeFactsFile(List<Fact> source)
+	{
+	  try
+     {
+          FileOutputStream fos = new FileOutputStream("./facts.txt");
+          PrintStream write = new PrintStream(fos);
+          for(Fact f:source)
+          {
+                write.println(f+".");
+          }
+      }
+         catch (IOException e)
+      {
+          System.out.println("Errore: " + e);
+          System.exit(1);
+      }
+	}
 	
 	
 	public Fact generateFactS(int values[][], int score, String m) 
