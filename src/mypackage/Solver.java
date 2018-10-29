@@ -16,10 +16,26 @@ Solver(){
 Solver(Move m){
 facts.clear();
 result.clear();
+if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
+{
+System.out.println( "gridUP e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridUP(),m.getScoreUP(), "UP" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid()))
+{
+System.out.println( "gridDOWN e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(), "DOWN" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid()))
+{
+System.out.println( "gridLEFT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(), "LEFT" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid()))
+{
+System.out.println( "gridRIGHT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
+}
 result.add(DLV());
 }
 public String DLV(){

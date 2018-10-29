@@ -16,7 +16,7 @@ public class Board extends JPanel implements KeyListener {
 	private static final Color BG_COLOR = new Color(0xbbada0);
 	private static final String FONT_NAME = "Arial";
 	private static Solver AI;
-	private boolean auto=false;
+	private ThreadAI thAI = new ThreadAI(this);
 	
 	private Tile[] tiles;
 
@@ -27,6 +27,7 @@ public class Board extends JPanel implements KeyListener {
 		setFocusable(true);
 		addKeyListener(this);
 		resetGame();
+		thAI = null;
 	}
 
 	public void resetGame() {
@@ -147,13 +148,6 @@ public class Board extends JPanel implements KeyListener {
 		}
 		return result;
 	}
-	private Tile[] getLineAI(Tile[] AItiles,int index) {
-		Tile[] result = new Tile[4];
-		for (int i = 0; i < 4; i++) {
-			result[i] = tileAtAI(AItiles,i, index);
-		}
-		return result;
-	}
 
 	private void setLine(int index, Tile[] re) {
 		System.arraycopy(re, 0, tiles, index * 4, 4);
@@ -199,21 +193,6 @@ public class Board extends JPanel implements KeyListener {
 		}
 	}
 
-	public Tile[] leftAI(){
-		Tile[] AItiles = tiles;
-		for(int i=0;i<4;i++)
-		{
-			Tile [] line = getLineAI(AItiles,i);
-		//	Tile[] merged = mergeLineAI(moveLine(line));
-			
-		}
-		
-		
-		
-		
-		return AItiles;
-		
-	}
 	
 	public void left() {
 		boolean needAddTile = false;
@@ -420,14 +399,25 @@ public class Board extends JPanel implements KeyListener {
 	{
 		Move m = new Move(tiles, score);
 		AI = new Solver(m);
+		if(thAI == null)
+			this.requestFocus();
 	}
 	
 	public void startAI()
 	{
-		while(auto && (!win || !lose))
-		{
-			oneHint();
-		}
+		  if (thAI != null) {
+              thAI.stopRunning();
+          }
+		thAI = new ThreadAI(this);
+		thAI.start();
+		
+	}
+	public void stopAI() {
+		 if (thAI != null) {
+             thAI.stopRunning();
+             thAI = null;
+         }
+		 this.requestFocus();
 	}
 	
 
@@ -444,6 +434,7 @@ public class Board extends JPanel implements KeyListener {
 	    	hint.addActionListener(this);
 	    	startAI.addActionListener(this);
 	    	stopAI.addActionListener(this);
+	    	this.setFocusable(true);
 	    	
 			this.add(hint);
 			this.add(startAI);
@@ -454,25 +445,43 @@ public class Board extends JPanel implements KeyListener {
 			 Object command = e.getActionCommand();
 			 System.out.println(command);
 		        if (command.equals("Suggerimento")){
-		           b.auto = false;
 		           b.oneHint();
 		        }
 		        else if (command.equals("Start Bot"))
 		        {
-		        	b.auto=true;
+		        	this.requestFocus();
 		        	b.startAI();
+		        	
 		        }
 		        else if (command.equals("Stop Bot"))
 		        {
-		        	b.auto=false;
+		        	b.stopAI();
 		        }
-		        
+		       
 			
 		}
 		
 	}
 	
 	
+	public boolean isWin() {
+		return win;
+	}
+
+	
+
+	public void setWin(boolean win) {
+		this.win = win;
+	}
+
+	public boolean isLose() {
+		return lose;
+	}
+
+	public void setLose(boolean lose) {
+		this.lose = lose;
+	}
+
 	public static void main(String[] args) {
 	    JFrame game = new JFrame();
 	    Board board = new Board();
@@ -482,10 +491,8 @@ public class Board extends JPanel implements KeyListener {
 	    game.setSize(340, 400);
 	    game.setResizable(false);
 	    game.setLayout(new BorderLayout());
-
 	    game.add(board,BorderLayout.CENTER);
 	    game.add(btPanel,BorderLayout.SOUTH);
-	   
 		
 	    game.setLocationRelativeTo(null);
 	    game.setVisible(true);

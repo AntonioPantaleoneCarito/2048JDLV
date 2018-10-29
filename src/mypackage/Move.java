@@ -27,9 +27,20 @@ public class Move {
 		this.score = score;
 		normalize(tTiles);
 		createMoveUP();
+		if(java.util.Arrays.deepEquals(gridUP,grid))
+			System.out.println("gridUP e Sorgente sono uguali");
+		
 		createMoveDOWN();
+		if(java.util.Arrays.deepEquals(gridDOWN,grid))
+			System.out.println("gridDOWN e Sorgente sono uguali");
+		
 		createMoveLEFT();
+		if(java.util.Arrays.deepEquals(gridLEFT,grid))
+			System.out.println("gridLEFT e Sorgente sono uguali");
+		
 		createMoveRIGHT();
+		if(java.util.Arrays.deepEquals(gridRIGHT,grid))
+			System.out.println("gridRIGHT e Sorgente sono uguali");
 	}
 
 	public void normalize(Tile[] tTiles) {
@@ -142,8 +153,6 @@ public class Move {
 	}
 
 	private int[] getRow(int[][] source, int index, Moves m) {
-		System.out.println("GETRIGA di "+m+" indice ="+index);
-
 		int[] row = new int[4];
 
 		if (m == Moves.LEFT) {
@@ -167,7 +176,6 @@ public class Move {
 
 	private int[] getCol(int[][] source, int index, Moves m) {
 		
-		System.out.println("GETCOLONNA di "+m+" indice ="+index);
 		int[] col = new int[4];
 
 		if (m == Moves.UP) {
@@ -200,17 +208,21 @@ public class Move {
 			if (!(oldLine[i] == 0))
 			{
 				l.add(oldLine[i]);
-				System.out.println("MoveLine Aggiunge: " + oldLine[i]);
 			}
 		}
+		System.out.println("la LL l: ");
+		for(Integer i : l)
+			System.out.print(i);
+		System.out.println();
 		
 		if (l.size() == 0) {
 			return oldLine;
 		}else{
 			int[] newLine = new int[4];
-			for (int i = 0; i <= l.size(); i++) {
-				newLine[i] = l.remove().intValue();
-				System.out.println("MoveLine Rimuovo: "+newLine[i]);
+			
+	
+			for (int i = 0; i < l.size(); i++) {
+					newLine[i] = l.get(i).intValue();
 			}
 			System.out.print("MoveLine Result: ");
 			for(int i=0;i<4;i++)
@@ -261,7 +273,6 @@ public class Move {
 	}
 
 	private void setLine(Moves m, int index, int[] re) {
-		System.out.println(m+" setLine "+ index);
 		int count = 0;
 
 		switch (m) {
@@ -357,6 +368,22 @@ public class Move {
 
 	public void setScoreRIGHT(int scoreRIGHT) {
 		this.scoreRIGHT = scoreRIGHT;
+	}
+
+	public int[][] getGrid() {
+		return grid;
+	}
+
+	public void setGrid(int[][] grid) {
+		this.grid = grid;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 	
 	
