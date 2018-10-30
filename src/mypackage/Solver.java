@@ -11,11 +11,15 @@ private int MAX_INT= 131072 ;
 private int MAX_SCORE= 59577 ;
 public List<Fact> facts= new ArrayList<Fact>();
 public List<String> result= new ArrayList<String>();
+public String strategy;
+Move move;
 Solver(){
 }
 Solver(Move m){
 facts.clear();
 result.clear();
+strategy= "null" ;
+ this .move=m;
 if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
 {
 System.out.println( "gridUP e Sorgente NON sono uguali" );
@@ -38,11 +42,41 @@ facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
 }
 result.add(DLV());
 }
+Solver(Move m,String s){
+facts.clear();
+result.clear();
+ this .move=m;
+if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
+{
+System.out.println( "gridUP e Sorgente NON sono uguali" );
+facts.add(generateFactS(m.getGridUP(),m.getScoreUP(), "UP" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid()))
+{
+System.out.println( "gridDOWN e Sorgente NON sono uguali" );
+facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(), "DOWN" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid()))
+{
+System.out.println( "gridLEFT e Sorgente NON sono uguali" );
+facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(), "LEFT" ));
+}
+if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid()))
+{
+System.out.println( "gridRIGHT e Sorgente NON sono uguali" );
+facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
+}
+ this .strategy=s;
+result.add(DLV());
+}
 public String DLV(){
 List<String> res= new ArrayList<String>();
 for(Fact f:facts)
 System.out.println(f+ "." );
-writeFactsFile(facts);
+System.out.println( "CommonChoice(" + '"' +strategy+ '"' + ")." );
+if(move.getPrevious()!= null )
+System.out.println( "PreviousChoice(" + '"' +move.getPrevious().name()+ '"' + ")." );
+writeFactsFile(facts,move);
 
 	// ---- START - startProgram ---- 
 it.unical.mat.jdlv.program.JDLV_Logger.getInstance().logInfoMessage("Creation newProgram JDLV module.");
@@ -62,9 +96,15 @@ _JDLV_PROGRAM_newProgram.addText(_JDLV_PROGRAM_BUFFER_newProgram.toString());
 _JDLV_PROGRAM_newProgram.addText("Best(M) v notBest(M) :- Grid(_, _, _, _, _, _, _, _, _, _, _, _, M, _)."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} = 0."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} > 1."+'\n');
+_JDLV_PROGRAM_newProgram.addText(":- Best(M), Grid(A, B, C, D, E, F, G, H, I, L, N, O, M, V), Grid(A, B, C, D, E, F, G, H, I, L, N, O, M1, V1), V < V1."+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"DOWN\"), PreviousChoice(\"UP\"). [1:20]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"UP\"), PreviousChoice(\"DOWN\"). [1:20]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"LEFT\"), PreviousChoice(\"RIGHT\"). [1:20]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"RIGHT\"), PreviousChoice(\"LEFT\"). [1:20]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), not CommonChoice(M). [1:1]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, TWO, _, _, _, _, _, _, _, _, _, _, M, _). [TWO:12]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, FOUR, _, _, _, _, _, _, _, _, _, M, _). [FOUR:11]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, EIGHT, _, _, _, _, _, _, _, _, M, _). [EIGHT:10]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, FOUR, _, _, _, _, _, _, _, _, _, M, _). [FOUR:12]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, EIGHT, _, _, _, _, _, _, _, _, M, _). [EIGHT:11]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, SIXTEEN, _, _, _, _, _, _, _, M, _). [SIXTEEN:9]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, THIRTYTWO, _, _, _, _, _, _, M, _). [THIRTYTWO:8]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, SIXTYFOUR, _, _, _, _, _, M, _). [SIXTYFOUR:7]"+'\n');
@@ -73,7 +113,6 @@ _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, TWOHU
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, FIVEHUNDREDTWELVE, _, _, M, _). [FIVEHUNDREDTWELVE:4]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, _, ONETHOUSANDTWENTYFOUR, _, M, _). [ONETHOUSANDTWENTYFOUR:3]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(E, _, _, _, _, _, _, _, _, _, _, _, M, _). [E:2]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, _, _, TWOTHOUSANDFOURTHYEIGHT, M, _). [TWOTHOUSANDFOURTHYEIGHT:1]"+'\n');
 _JDLV_PROGRAM_newProgram.getFiles().clear();
 _JDLV_PROGRAM_newProgram.addFile("./facts.txt");
 _JDLV_INVOCATION_newProgram.setNumberOfModels(1);
@@ -104,11 +143,13 @@ _JDLV_PROGRAM_newProgram.cleanText();
 if(res.size()!= 0 )
 {
 System.out.println( "Mossa scelta " +res.get( 0 ));
+if(move.getPrevious()!= null )
+System.out.println( "PreviousChoice(" + '"' +move.getPrevious().name()+ '"' + ")." );
 return res.get( 0 );
 }
 return  "ALTRO" ;
 }
-public  void  writeFactsFile(List<Fact> source){
+public  void  writeFactsFile(List<Fact> source,Move m){
 try
 {
 FileOutputStream fos= new FileOutputStream( "./facts.txt" );
@@ -116,6 +157,14 @@ PrintStream write= new PrintStream(fos);
 for(Fact f:source)
 {
 write.println(f+ "." );
+}
+if(!strategy.equals( "null" ))
+{
+write.println( "CommonChoice(" + '"' +strategy+ '"' + ")." );
+}
+if(m.getPrevious()!= null )
+{
+write.println( "PreviousChoice(" + '"' +m.getPrevious().name()+ '"' + ")." );
 }
 }
 catch(IOException e){

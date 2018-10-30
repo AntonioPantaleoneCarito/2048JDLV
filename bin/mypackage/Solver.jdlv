@@ -12,12 +12,16 @@ public class Solver
 	
 	public List<Fact> facts=new ArrayList<Fact>();
 	public List<String> result=new ArrayList<String>();
+	public String strategy;
+	Move move;
 
 	Solver(){}
 	
 	Solver(Move m){
 		facts.clear();
 		result.clear();
+		strategy="null";
+		this.move=m;
 		if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
 		{
 			System.out.println("gridUP e Sorgente NON sono uguali");
@@ -42,14 +46,49 @@ public class Solver
 		result.add(DLV());
 	}
 	
+	
+	Solver(Move m, String s){
+		facts.clear();
+		result.clear();
+		this.move=m;
+		if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
+		{
+			System.out.println("gridUP e Sorgente NON sono uguali");
+			facts.add(generateFactS(m.getGridUP(),m.getScoreUP(),"UP"));
+		}
+		if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid()))
+		{
+			System.out.println("gridDOWN e Sorgente NON sono uguali");
+			facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(),"DOWN"));
+		}
+		if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid()))
+		{
+			System.out.println("gridLEFT e Sorgente NON sono uguali");
+			facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(),"LEFT"));
+		}
+		if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid()))
+		{
+			System.out.println("gridRIGHT e Sorgente NON sono uguali");
+			facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(),"RIGHT"));
+		}
+		
+		this.strategy=s;
+		
+		result.add(DLV());
+	}
+	
 	public String DLV()
 	{
 		List<String> res= new ArrayList<String>();
 		
 		for(Fact f : facts)
 			System.out.println(f+".");
+		System.out.println("CommonChoice("+'"'+strategy+'"'+").");
 		
-		writeFactsFile(facts);
+		if(move.getPrevious()!=null)
+			System.out.println("PreviousChoice("+'"'+move.getPrevious().name()+'"'+").");
+		
+		writeFactsFile(facts,move);
 		
 		
 		<#(newProgram)
@@ -80,20 +119,40 @@ public class Solver
 			//Check
 			:-#count{M:Best(M)} = 0. //Esiste sempre una mossa Best
 			:-#count {M:Best(M)} > 1. //Esiste una sola mossa Best
+			:-Best(M),Grid(A,B,C,D,E,F,G,H,I,L,N,O,M,V),Grid(A,B,C,D,E,F,G,H,I,L,N,O,M1,V1),V<V1. //Se esistono due mosse dallo stesso esito si sceglie quella con score pi\ alto
+		
+			//WEAK che non permettono di generare una mossa opposta alla precedente per non incasinare la griglia
+			:~Best("DOWN"),PreviousChoice("UP").[1:20]
+			:~Best("UP"),PreviousChoice("DOWN").[1:20]
+			:~Best("LEFT"),PreviousChoice("RIGHT").[1:20]
+			:~Best("RIGHT"),PreviousChoice("LEFT").[1:20]
 		
 			//WEAK di Minimizzazione
+			:~Best(M),not CommonChoice(M). [1:1]
+			
 			:~Best(M),Grid(_,TWO,_,_,_,_,_,_,_,_,_,_,M,_). [TWO:12] //Minimizza celle TWO
-			:~Best(M),Grid(_,_,FOUR,_,_,_,_,_,_,_,_,_,M,_). [FOUR:11] //Minimizza celle FOUR
-			:~Best(M),Grid(_,_,_,EIGHT,_,_,_,_,_,_,_,_,M,_). [EIGHT:10]//Minimizza celle EIGHT
+			
+			:~Best(M),Grid(_,_,FOUR,_,_,_,_,_,_,_,_,_,M,_). [FOUR:12] //Minimizza celle FOUR
+			
+			:~Best(M),Grid(_,_,_,EIGHT,_,_,_,_,_,_,_,_,M,_). [EIGHT:11]//Minimizza celle EIGHT
+			
 			:~Best(M),Grid(_,_,_,_,SIXTEEN,_,_,_,_,_,_,_,M,_). [SIXTEEN:9]//Minimizza celle SIXTEEN
+			
 			:~Best(M),Grid(_,_,_,_,_,THIRTYTWO,_,_,_,_,_,_,M,_). [THIRTYTWO:8] //Minimizza celle THIRTYTWO
+			
 			:~Best(M),Grid(_,_,_,_,_,_,SIXTYFOUR,_,_,_,_,_,M,_). [SIXTYFOUR:7] //Minimizza celle SIXTYFOUR
+			
 			:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDERDTWENTYEIGHT:6] //Minimizza celle ONEHUNDREDTWENTYEIGHT
+			
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,TWOHUNDREDFIFTYSIX,_,_,_,M,_). [TWOHUNDREDFIFTYSIX:5] //Minimizza celle TWOHUNDREDFIFTYSIX
+			
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,FIVEHUNDREDTWELVE,_,_,M,_). [FIVEHUNDREDTWELVE:4] //Minimizza celle FIVEHUNDREDTWELVE
+			
 			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,ONETHOUSANDTWENTYFOUR,_,M,_). [ONETHOUSANDTWENTYFOUR:3] //Minimizza celle ONETHOUSANDTWENTYFOUR
+			
 			:~Best(M),Grid(E,_,_,_,_,_,_,_,_,_,_,_,M,_). [E:2] //Minimizza celle EMPTY
-			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [TWOTHOUSANDFOURTHYEIGHT:1] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
+			
+		//	:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,_,TWOTHOUSANDFOURTHYEIGHT,M,_). [1:1] //Minimizza celle TWOTHOUSANFOURTHYEIGHT
 		
 		#>
 		if_no_answerset{
@@ -104,28 +163,41 @@ public class Solver
 		if(res.size()!=0){
 			System.out.println("Mossa scelta "+res.get(0));
 			
+			if(move.getPrevious()!=null)
+				System.out.println("PreviousChoice("+'"'+move.getPrevious().name()+'"'+").");
+				
 			return res.get(0);
 		}
 		
 		return "ALTRO";
 	}
 		
-	public void writeFactsFile(List<Fact> source)
+	public void writeFactsFile(List<Fact> source,Move m)
 	{
 	  try
      {
           FileOutputStream fos = new FileOutputStream("./facts.txt");
           PrintStream write = new PrintStream(fos);
           for(Fact f:source)
+          	{
+            	    write.println(f+".");
+          	}
+          if(!strategy.equals("null"))
           {
-                write.println(f+".");
+          	write.println("CommonChoice("+'"'+strategy+'"'+").");
           }
+          if(m.getPrevious()!=null)
+          {
+          	write.println("PreviousChoice("+'"'+m.getPrevious().name()+'"'+").");
+          }
+          
       }
          catch (IOException e)
       {
           System.out.println("Errore: " + e);
           System.exit(1);
       }
+      
 	}
 	
 	

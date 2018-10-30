@@ -11,6 +11,7 @@ public class Fact {
 	{
 		
 	}
+
 	
 public Fact(int e, int tWO, int fOUR, int eIGHT, int sIXTEEN, int tHIRTYTWO,
 		int sIXTYFOUR, int oNEHUNDREDTWENTYEIGHT, int tWOHUNDREDFIFTYSIX,

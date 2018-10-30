@@ -3,15 +3,11 @@ package mypackage;
 import java.util.LinkedList;
 import java.util.List;
 
+import mypackage.Board.Moves;
 import mypackage.Board.Tile;
 
 public class Move {
-	enum Moves {
-		UP, DOWN, LEFT, RIGHT;
-	}
-
 	
-
 	private int grid[][];
 	private int score;
 	public int gridUP[][];
@@ -22,10 +18,12 @@ public class Move {
 	private int scoreLEFT=0;
 	public int gridRIGHT[][];
 	private int scoreRIGHT=0;
+	private Moves previous=null;
 
 	Move(Tile[] tTiles, int score) {
 		this.score = score;
 		normalize(tTiles);
+		
 		createMoveUP();
 		if(java.util.Arrays.deepEquals(gridUP,grid))
 			System.out.println("gridUP e Sorgente sono uguali");
@@ -60,7 +58,7 @@ public class Move {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				grid[i][j] = tTiles[index++].getValue();
-				System.out.print(grid[i][j]);
+				System.out.print(grid[i][j]+" ");
 			}
 			System.out.println();
 		}
@@ -79,7 +77,7 @@ public class Move {
 		{
 			System.out.println();
 			for(int j=0;j<4;j++)
-				System.out.print(gridUP[i][j]);
+				System.out.print(gridUP[i][j]+" ");
 		}
 		System.out.println();
 
@@ -101,7 +99,7 @@ public class Move {
 		{
 			System.out.println();
 			for(int j=0;j<4;j++)
-				System.out.print(gridDOWN[i][j]);
+				System.out.print(gridDOWN[i][j]+" ");
 		}
 		System.out.println();
 
@@ -124,7 +122,7 @@ public class Move {
 		{
 			System.out.println();
 			for(int j=0;j<4;j++)
-				System.out.print(gridLEFT[i][j]);
+				System.out.print(gridLEFT[i][j]+" ");
 		}
 		System.out.println();
 
@@ -146,7 +144,7 @@ public class Move {
 		{
 			System.out.println();
 			for(int j=0;j<4;j++)
-				System.out.print(gridRIGHT[i][j]);
+				System.out.print(gridRIGHT[i][j]+" ");
 		}
 		System.out.println();
 
@@ -200,7 +198,7 @@ public class Move {
 		
 		System.out.print("MoveLine Input: ");
 		for(int i=0;i<4;i++)
-			System.out.print(oldLine[i]);
+			System.out.print(oldLine[i]+" ");
 		System.out.println();
 		
 		LinkedList<Integer> l = new LinkedList<Integer>();
@@ -210,11 +208,6 @@ public class Move {
 				l.add(oldLine[i]);
 			}
 		}
-		System.out.println("la LL l: ");
-		for(Integer i : l)
-			System.out.print(i);
-		System.out.println();
-		
 		if (l.size() == 0) {
 			return oldLine;
 		}else{
@@ -226,7 +219,7 @@ public class Move {
 			}
 			System.out.print("MoveLine Result: ");
 			for(int i=0;i<4;i++)
-				System.out.print(newLine[i]);
+				System.out.print(newLine[i]+" ");
 			System.out.println();
 			
 			return newLine;
@@ -238,7 +231,7 @@ public class Move {
 		
 		System.out.println("MergeLine Input: ");
 		for(int i=0;i<4;i++)
-			System.out.print(oldLine[i]);
+			System.out.print(oldLine[i]+" ");
 		System.out.println();
 
 		for (int i = 0; i < 4 && !(oldLine[i]==0); i++) {
@@ -384,6 +377,14 @@ public class Move {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public Moves getPrevious() {
+		return previous;
+	}
+
+	public void setPrevious(Moves moves) {
+		this.previous = moves;
 	}
 	
 	

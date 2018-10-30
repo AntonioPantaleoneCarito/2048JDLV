@@ -6,8 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Board extends JPanel implements KeyListener {
@@ -17,6 +20,13 @@ public class Board extends JPanel implements KeyListener {
 	private static final String FONT_NAME = "Arial";
 	private static Solver AI;
 	private ThreadAI thAI = new ThreadAI(this);
+	private List<Moves> log=new ArrayList<Moves>();
+	private int countMoves=0;
+	public Moves strategyChoice=null;
+	
+	enum Moves {
+		UP, DOWN, LEFT, RIGHT;
+	}
 	
 	private Tile[] tiles;
 
@@ -301,21 +311,31 @@ public class Board extends JPanel implements KeyListener {
 		}
 
 		if (!win && !lose) {
+			System.out.println("Mossa numero: "+(countMoves+1));
+			
+			
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
+				log.add(Moves.LEFT);
 				left();
 				break;
 			case KeyEvent.VK_RIGHT:
+				log.add(Moves.RIGHT);
 				right();
 				break;
 			case KeyEvent.VK_DOWN:
+				log.add(Moves.DOWN);
 				down();
 				break;
 			case KeyEvent.VK_UP:
+				log.add(Moves.UP);
 				up();
 				break;
 			}
+			countMoves++;
 		}
+		
+		this.getStrategy();
 
 		if (!win && !canMove()) {
 			lose = true;
@@ -397,11 +417,56 @@ public class Board extends JPanel implements KeyListener {
 	
 	public void oneHint()
 	{
-		Move m = new Move(tiles, score);
-		AI = new Solver(m);
+		if (!canMove()) {
+			lose = true;
+		}
+
+		if (!win && !lose) 
+		{
+			System.out.println("Mossa numero: "+(countMoves+1));
+			Move m = new Move(tiles, score);
+			
+			if(!log.isEmpty())
+				m.setPrevious(log.get(log.size()-1));
+			
+			if(strategyChoice==null)
+				AI = new Solver(m);
+			else
+				AI = new Solver(m,strategyChoice.name());
+			
+			Moves choice= Moves.valueOf(AI.result.get(0));
+			log.add(choice);
+			
+			switch (choice) {
+			case LEFT:
+				left();
+				break;
+			case RIGHT:
+				right();
+				break;
+			case DOWN:
+				down();
+				break;
+			case UP:
+				up();
+				break;
+			}
+			countMoves++;
+			
+			if (!win && !canMove()) {
+				lose = true;
+			}
+			this.getStrategy();
+		}
+		
+		
+		repaint();
+			
 		if(thAI == null)
 			this.requestFocus();
-	}
+		
+}
+
 	
 	public void startAI()
 	{
@@ -418,6 +483,31 @@ public class Board extends JPanel implements KeyListener {
              thAI = null;
          }
 		 this.requestFocus();
+	}
+	
+	public void getStrategy(){
+		Map<Moves,Integer> strategyMap = new HashMap<Moves, Integer>();
+		for(Moves m : log)
+		{
+			if (!strategyMap.containsKey(m)) {             
+	            strategyMap.put(m, 1 ) ; 
+	        }
+	        else {
+	            int value = strategyMap.get(m) ; 
+	            value++ ; 
+	            strategyMap.put(m, value) ;
+	        }       
+		}
+		
+
+		    for ( Map.Entry<Moves,Integer> e : strategyMap.entrySet() ) {
+
+		        if (e.getValue() == Collections.max(strategyMap.values() )){
+		        	strategyChoice= e.getKey() ;
+		        }   
+		    }
+
+		    System.out.println("Mossa Preferita: "+strategyChoice);
 	}
 	
 
