@@ -4,6 +4,7 @@ import mypackage.Board.Tile;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.*;
 
 public  class Solver{
 
@@ -20,22 +21,22 @@ facts.clear();
 result.clear();
 strategy= "null" ;
  this .move=m;
-if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid())&&m.getGridUP()!= null )
 {
 System.out.println( "gridUP e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridUP(),m.getScoreUP(), "UP" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid())&&m.getGridDOWN()!= null )
 {
 System.out.println( "gridDOWN e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(), "DOWN" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid())&&m.getGridLEFT()!= null )
 {
 System.out.println( "gridLEFT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(), "LEFT" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid())&&m.getGridRIGHT()!= null )
 {
 System.out.println( "gridRIGHT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
@@ -46,22 +47,22 @@ Solver(Move m,String s){
 facts.clear();
 result.clear();
  this .move=m;
-if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridUP(),m.getGrid())&&m.getGridUP()!= null )
 {
 System.out.println( "gridUP e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridUP(),m.getScoreUP(), "UP" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridDOWN(),m.getGrid())&&m.getGridDOWN()!= null )
 {
 System.out.println( "gridDOWN e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridDOWN(),m.getScoreDOWN(), "DOWN" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridLEFT(),m.getGrid())&&m.getGridLEFT()!= null )
 {
 System.out.println( "gridLEFT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridLEFT(),m.getScoreLEFT(), "LEFT" ));
 }
-if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid()))
+if(!java.util.Arrays.deepEquals(m.getGridRIGHT(),m.getGrid())&&m.getGridRIGHT()!= null )
 {
 System.out.println( "gridRIGHT e Sorgente NON sono uguali" );
 facts.add(generateFactS(m.getGridRIGHT(),m.getScoreRIGHT(), "RIGHT" ));
@@ -96,23 +97,62 @@ _JDLV_PROGRAM_newProgram.addText(_JDLV_PROGRAM_BUFFER_newProgram.toString());
 _JDLV_PROGRAM_newProgram.addText("Best(M) v notBest(M) :- Grid(_, _, _, _, _, _, _, _, _, _, _, _, M, _)."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} = 0."+'\n');
 _JDLV_PROGRAM_newProgram.addText(":- #count{M : Best(M)} > 1."+'\n');
-_JDLV_PROGRAM_newProgram.addText(":- Best(M), Grid(A, B, C, D, E, F, G, H, I, L, N, O, M, V), Grid(A, B, C, D, E, F, G, H, I, L, N, O, M1, V1), V < V1."+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(\"DOWN\"), PreviousChoice(\"UP\"). [1:20]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(\"UP\"), PreviousChoice(\"DOWN\"). [1:20]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(\"LEFT\"), PreviousChoice(\"RIGHT\"). [1:20]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(\"RIGHT\"), PreviousChoice(\"LEFT\"). [1:20]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"DOWN\"), PreviousChoice(\"UP\"). [1:1]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"UP\"), PreviousChoice(\"DOWN\"). [1:1]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"LEFT\"), PreviousChoice(\"RIGHT\"). [1:1]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(\"RIGHT\"), PreviousChoice(\"LEFT\"). [1:1]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), not CommonChoice(M). [1:1]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"LEFT\"), MaxList(V, _, _, _), GridPos(V, V, _, _, _, _, _, _, _, _, _, _, _, _, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"LEFT\"), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, V, V, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"RIGHT\"), MaxList(V, _, _, _), GridPos(_, _, V, V, _, _, _, _, _, _, _, _, _, _, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"RIGHT\"), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, _, _, V, V, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"UP\"), MaxList(V, _, _, _), GridPos(V, _, _, _, V, _, _, _, _, _, _, _, _, _, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"UP\"), MaxList(V, _, _, _), GridPos(_, _, _, V, _, _, _, V, _, _, _, _, _, _, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"DOWN\"), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, V, _, _, _, V, _, _, _, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(\"DOWN\"), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, V, _, _, _, V, \"ORIGINE\", _). [1:28]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, _, _, _), GridPos(V, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:24]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, _, _, _), GridPos(_, _, _, V, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:24]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, V, _, _, _, M, _). [1:24]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, _, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, V, M, _). [1:24]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(V, K, _, _, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(V, _, _, _, K, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, K, V, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, _, V, _, _, _, K, _, _, _, _, _, _, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, V, K, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, _, _, _, _, _, _, K, _, _, _, V, _, _, _, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, _, _, K, V, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, _, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, K, _, _, _, V, M, _). [1:25]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(V, K, J, _, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(V, _, _, _, K, _, _, _, J, _, _, _, _, _, _, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, J, K, V, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, _, _, V, _, _, _, K, _, _, _, J, _, _, _, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, V, K, J, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, _, _, _, J, _, _, _, K, _, _, _, V, _, _, _, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, _, J, K, V, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, _), GridPos(_, _, _, _, _, _, _, J, _, _, _, K, _, _, _, V, M, _). [1:26]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(V, K, J, Y, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(V, _, _, _, K, _, _, _, J, _, _, _, Y, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(V, _, _, _, _, K, _, _, _, _, J, _, _, _, _, Y, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(Y, J, K, V, _, _, _, _, _, _, _, _, _, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, V, _, _, _, K, _, _, _, J, _, _, _, Y, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, V, _, _, K, _, _, J, _, _, Y, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, V, K, J, Y, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(Y, _, _, _, J, _, _, _, K, _, _, _, V, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, y, _, _, J, _, _, K, _, _, V, _, _, _, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, _, _, _, _, _, _, _, _, _, Y, J, K, V, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(_, _, _, Y, _, _, _, J, _, _, _, K, _, _, _, V, M, _). [1:27]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), MaxList(V, K, J, Y), GridPos(Y, _, _, _, _, J, _, _, _, _, K, _, _, _, _, V, M, _). [1:27]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, TWO, _, _, _, _, _, _, _, _, _, _, M, _). [TWO:12]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, FOUR, _, _, _, _, _, _, _, _, _, M, _). [FOUR:12]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, EIGHT, _, _, _, _, _, _, _, _, M, _). [EIGHT:11]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, SIXTEEN, _, _, _, _, _, _, _, M, _). [SIXTEEN:9]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, THIRTYTWO, _, _, _, _, _, _, M, _). [THIRTYTWO:8]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, SIXTYFOUR, _, _, _, _, _, M, _). [SIXTYFOUR:7]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, ONEHUNDERDTWENTYEIGHT, _, _, _, _, M, _). [ONEHUNDERDTWENTYEIGHT:6]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, SIXTEEN, _, _, _, _, _, _, _, M, _). [SIXTEEN:10]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, THIRTYTWO, _, _, _, _, _, _, M, _). [THIRTYTWO:9]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, SIXTYFOUR, _, _, _, _, _, M, _). [SIXTYFOUR:8]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, ONEHUNDERDTWENTYEIGHT, _, _, _, _, M, _). [ONEHUNDERDTWENTYEIGHT:7]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, TWOHUNDREDFIFTYSIX, _, _, _, M, _). [TWOHUNDREDFIFTYSIX:5]"+'\n');
 _JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, FIVEHUNDREDTWELVE, _, _, M, _). [FIVEHUNDREDTWELVE:4]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(_, _, _, _, _, _, _, _, _, _, ONETHOUSANDTWENTYFOUR, _, M, _). [ONETHOUSANDTWENTYFOUR:3]"+'\n');
-_JDLV_PROGRAM_newProgram.addText(":~ Best(M), Grid(E, _, _, _, _, _, _, _, _, _, _, _, M, _). [E:2]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), Grid(_, _, _, _, _, _, _, _, _, _, _, _, _, V). [V:3]"+'\n');
+_JDLV_PROGRAM_newProgram.addText(":~ notBest(M), Grid(E, _, _, _, _, _, _, _, _, _, _, _, M, _). [E:3]"+'\n');
 _JDLV_PROGRAM_newProgram.getFiles().clear();
 _JDLV_PROGRAM_newProgram.addFile("./facts.txt");
 _JDLV_INVOCATION_newProgram.setNumberOfModels(1);
@@ -165,6 +205,81 @@ write.println( "CommonChoice(" + '"' +strategy+ '"' + ")." );
 if(m.getPrevious()!= null )
 {
 write.println( "PreviousChoice(" + '"' +m.getPrevious().name()+ '"' + ")." );
+}
+int gridT[][]=m.getGrid();
+int scoreT=m.getScore();
+List<Integer> maxL= new ArrayList<Integer>();
+if(gridT!= null )
+{
+write.print( "GridPos(" );
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+write.print(gridT[i][j]+ "," );
+}
+write.println( '"' + "ORIGINE" + '"' + "," +scoreT+ ")." );
+}
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+maxL.add(gridT[i][j]);
+}
+if(maxL.size()> 3 )
+{
+Collections.sort(maxL,Collections.reverseOrder());
+write.println( "Max(" +maxL.get( 0 )+ ")." );
+write.print( "MaxList(" +maxL.get( 0 ));
+for(int i= 1 ;i< 4 ;i++)
+write.print( "," +maxL.get(i));
+write.println( ")." );
+}
+scoreT=m.getScoreUP();
+gridT=m.getGridUP();
+if(gridT!= null )
+{
+write.print( "GridPos(" );
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+write.print(gridT[i][j]+ "," );
+}
+write.println( '"' + "UP" + '"' + "," +scoreT+ ")." );
+}
+gridT=m.getGridDOWN();
+scoreT=m.getScoreDOWN();
+if(gridT!= null )
+{
+write.print( "GridPos(" );
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+write.print(gridT[i][j]+ "," );
+}
+write.println( '"' + "DOWN" + '"' + "," +scoreT+ ")." );
+}
+gridT=m.getGridRIGHT();
+scoreT=m.getScoreRIGHT();
+if(gridT!= null )
+{
+write.print( "GridPos(" );
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+write.print(gridT[i][j]+ "," );
+}
+write.println( '"' + "RIGHT" + '"' + "," +scoreT+ ")." );
+}
+gridT=m.getGridLEFT();
+scoreT=m.getScoreLEFT();
+if(gridT!= null )
+{
+write.print( "GridPos(" );
+for(int i= 0 ;i< 4 ;i++)
+for(int j= 0 ;j< 4 ;j++)
+{
+write.print(gridT[i][j]+ "," );
+}
+write.println( '"' + "LEFT" + '"' + "," +scoreT+ ")." );
 }
 }
 catch(IOException e){

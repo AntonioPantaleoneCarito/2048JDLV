@@ -26,19 +26,31 @@ public class Move {
 		
 		createMoveUP();
 		if(java.util.Arrays.deepEquals(gridUP,grid))
+		{
 			System.out.println("gridUP e Sorgente sono uguali");
+			gridUP=null;
+		}
 		
 		createMoveDOWN();
 		if(java.util.Arrays.deepEquals(gridDOWN,grid))
+		{
 			System.out.println("gridDOWN e Sorgente sono uguali");
+			gridDOWN=null;
+		}
 		
 		createMoveLEFT();
 		if(java.util.Arrays.deepEquals(gridLEFT,grid))
+		{
 			System.out.println("gridLEFT e Sorgente sono uguali");
+			gridLEFT=null;
+		}
 		
 		createMoveRIGHT();
 		if(java.util.Arrays.deepEquals(gridRIGHT,grid))
+		{
 			System.out.println("gridRIGHT e Sorgente sono uguali");
+			gridRIGHT=null;
+		}
 	}
 
 	public void normalize(Tile[] tTiles) {
