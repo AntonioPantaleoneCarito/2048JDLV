@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +44,10 @@ public class Board extends JPanel implements KeyListener {
 	}
 
 	public void resetGame() {
+        log.clear();
+        countMoves=0;
+        strategyChoice=null;
+        		
 		score = 0;
 		win = false;
 		lose = false;
@@ -100,10 +107,6 @@ public class Board extends JPanel implements KeyListener {
 
 	private Tile tileAt(int x, int y) {
 		return tiles[x + y * 4];
-	}
-	private Tile tileAtAI(Tile[] AItiles, int x, int y)
-	{
-		return AItiles[x + y * 4];
 	}
 	
 	private boolean compare(Tile[] line1, Tile[] line2) {
@@ -399,15 +402,35 @@ public class Board extends JPanel implements KeyListener {
 			if (lose) {
 				g.drawString("Game over!", 50, 130);
 				g.drawString("You lose!", 64, 200);
+				g.drawString("Score:"+score, 50, 250);
 			}
 			if (win || lose) {
 				g.setFont(new Font(FONT_NAME, Font.PLAIN, 16));
 				g.setColor(new Color(128, 128, 128, 128));
 				g.drawString("Press ESC to play again", 80, getHeight() - 40);
 			}
+			stopAI();
+			
+			FileOutputStream fos;
+			try {
+				fos = new FileOutputStream("./LastPlayLog.txt");
+				@SuppressWarnings("resource")
+				PrintStream write = new PrintStream(fos);
+				int count=1;
+				for(Moves m : log )
+				{
+					 write.println("Mossa "+(count++)+": "+m.name());
+				}
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 		g.setFont(new Font(FONT_NAME, Font.PLAIN, 18));
-		g.drawString("Score: " + score, 200, 365);
+		g.drawString("Score: " + score, 0, 333);
 
 	}
 
@@ -512,6 +535,7 @@ public class Board extends JPanel implements KeyListener {
 	
 
 
+	@SuppressWarnings("serial")
 	static class buttonPanel extends JPanel implements ActionListener
 	{
 		JButton hint=new JButton("Suggerimento");

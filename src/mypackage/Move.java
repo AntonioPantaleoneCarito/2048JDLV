@@ -399,5 +399,6 @@ public class Move {
 		this.previous = moves;
 	}
 	
+
 	
 }

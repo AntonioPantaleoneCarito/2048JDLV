@@ -120,7 +120,7 @@ public class Solver
 			//Check
 			:-#count{M:Best(M)} = 0. //Esiste sempre una mossa Best
 			:-#count {M:Best(M)} > 1. //Esiste una sola mossa Best
-		
+			
 		
 
 
@@ -129,32 +129,78 @@ public class Solver
 		
 		
 			//WEAK che non permettono di generare una mossa opposta alla precedente per non incasinare la griglia
-			:~Best("DOWN"),PreviousChoice("UP").[1:1]
-			:~Best("UP"),PreviousChoice("DOWN").[1:1]
-			:~Best("LEFT"),PreviousChoice("RIGHT").[1:1]
-			:~Best("RIGHT"),PreviousChoice("LEFT").[1:1]
+			:~Best("DOWN"),PreviousChoice("UP").[1:4]
+			:~Best("UP"),PreviousChoice("DOWN").[1:4]
+			:~Best("LEFT"),PreviousChoice("RIGHT").[1:4]
+			:~Best("RIGHT"),PreviousChoice("LEFT").[1:4]
 			:~Best(M),not CommonChoice(M). [1:1]
 			
-			
 			//MASSIMO CON ACCANTO MASSIMO
-			:~notBest("LEFT"),MaxList(V,_,_,_),GridPos(V,V,_,_,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:28]
-			:~notBest("LEFT"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,V,V,_,_,"ORIGINE",_). [1:28]
-			:~notBest("RIGHT"),MaxList(V,_,_,_),GridPos(_,_,V,V,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:28]
-			:~notBest("RIGHT"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,_,_,V,V,"ORIGINE",_). [1:28]
-			:~notBest("UP"),MaxList(V,_,_,_),GridPos(V,_,_,_,V,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:28]
-			:~notBest("UP"),MaxList(V,_,_,_),GridPos(_,_,_,V,_,_,_,V,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:28]
-			:~notBest("DOWN"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,V,_,_,_,V,_,_,_,"ORIGINE",_). [1:28]
-			:~notBest("DOWN"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,V,_,_,_,V,"ORIGINE",_). [1:28]
+			:~notBest("LEFT"),MaxList(V,_,_,_),GridPos(V,V,_,_,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:30]
+			:~notBest("LEFT"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,V,V,_,_,"ORIGINE",_). [1:30]
+			:~notBest("RIGHT"),MaxList(V,_,_,_),GridPos(_,_,V,V,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:30]
+			:~notBest("RIGHT"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,_,_,V,V,"ORIGINE",_). [1:30]
+			:~notBest("UP"),MaxList(V,_,_,_),GridPos(V,_,_,_,V,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:30]
+			:~notBest("UP"),MaxList(V,_,_,_),GridPos(_,_,_,V,_,_,_,V,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:30]
+			:~notBest("DOWN"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,V,_,_,_,V,_,_,_,"ORIGINE",_). [1:30]
+			:~notBest("DOWN"),MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,V,_,_,_,V,"ORIGINE",_). [1:30]
 			
+			//SUBMASSIMO CON ACCANTO SUBMASSIMO MENTRE IL MASSIMO E' ALL ANGOLO
+			:~notBest("LEFT"),MaxList(V,K,_,_),GridPos(V,K,K,_,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("LEFT"),MaxList(V,K,_,_),GridPos(V,_,_,_,K,K,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("LEFT"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,V,K,K,_,"ORIGINE",_). [1:29]
+			:~notBest("LEFT"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,K,K,_,_,V,_,_,_,"ORIGINE",_). [1:29]
 			
+			:~notBest("RIGHT"),MaxList(V,K,_,_),GridPos(_,K,K,V,_,_,_,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("RIGHT"),MaxList(V,K,_,_),GridPos(_,_,_,V,_,_,K,K,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("RIGHT"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,_,K,K,V,"ORIGINE",_). [1:29]
+			:~notBest("RIGHT"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,K,K,_,_,_,V,"ORIGINE",_). [1:29]
 			
-			//TIENE IL VALORE MASSIMO AD UN ANGOLO
+			:~notBest("UP"),MaxList(V,K,_,_),GridPos(V,_,_,_,K,_,_,_,K,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("UP"),MaxList(V,K,_,_),GridPos(V,K,_,_,_,K,_,_,K,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("UP"),MaxList(V,K,_,_),GridPos(_,_,_,V,_,_,_,K,_,_,_,K,_,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("UP"),MaxList(V,K,_,_),GridPos(_,_,K,V,_,_,K,_,_,_,_,_,_,_,_,_,"ORIGINE",_). [1:29]
+			
+			:~notBest("DOWN"),MaxList(V,K,_,_),GridPos(_,_,_,_,K,_,_,_,K,_,_,_,V,_,_,_,"ORIGINE",_). [1:29]
+			:~notBest("DOWN"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,_,K,_,_,V,K,_,_,"ORIGINE",_). [1:29]
+			:~notBest("DOWN"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,K,_,_,_,K,_,_,_,V,"ORIGINE",_). [1:29]
+			:~notBest("DOWN"),MaxList(V,K,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,K,_,_,_,K,V,"ORIGINE",_). [1:29]
+//			
+//TIENE IL VALORE MASSIMO AD UN ANGOLO WORK E IN BASE A QUALE ANGOLO E' IMPONE MONOTONICITA
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(V,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),B>=C,C>=D,E>=F,F>=G,G>=H,I>=L,L>=N,N>=O,P>=Q,Q>=R,R>=S. [1:28]
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(V,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),E>=I,I>=P,B>=F,F>=L,L>=Q,C>=G,G>=N,N>=R,D>=H,H>=O,O>=S. [1:28]
+//			
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,V,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),C>=B,B>=A,H>=G,G>=F,F>=E,O>=N,N>=L,L>=I,S>=R,R>=Q,Q>=P. [1:28]
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,V,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),A>=O,O>=S,C>=G,G>=N,N>=R,B>=F,F>=L,L>=Q,A>=E,E>=I,I>=P. [1:28]
+//			
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,V,Q,R,S,M,_),A>=B,B>=C,C>=D,E>=F,F>=G,G>=H,I>=L,L>=N,N>=O,Q>=R,R>=S. [1:28]
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,V,Q,R,S,M,_),I>=E,E>=A,Q>=L,L>=F,F>=B,R>=N,N>=G,G>=C,S>=O,O>=H,H>=D. [1:28]
+//			
+//  		:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,V,M,_),D>=C,C>=B,B>=A,H>=G,G>=F,F>=E,O>=N,N>=L,L>=I,R>=Q,Q>=P. [1:28]
+//			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,V,M,_),O>=H,H>=D,R>=N,N>=G,G>=C,Q>=L,L>=F,F>=B,P>=I,I>=E,E>=A. [1:28]
+//			
+
+
+			//TIENE IL VALORE MASSIMO AD UN ANGOLO WORK E IN BASE A QUALE ANGOLO E' IMPONE MONOTONICITA ( COME PRIMA MA POTENZIATA CON DIFFERENZA)
+			:~notBest(M), MaxList(V,_,_,_),GridPos(V,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),B>=C,C>=D,C>=D,E>=F,F>=G,G>=H,I>=L,L>=N,N>=O,P>=Q,Q>=R,R>=S. [1:23]
+			:~notBest(M), MaxList(V,_,_,_),GridPos(V,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),E>=I,I>=P,B>=F,F>=L,L>=Q,C>=G,G>=N,N>=R,D>=H,H>=O,O>=S. [1:23]
+			
+			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,V,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),C>=B,B>=A,H>=G,G>=F,F>=E,O>=N,N>=L,L>=I,S>=R,R>=Q,Q>=P. [1:23]
+			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,V,E,F,G,H,I,L,N,O,P,Q,R,S,M,_),A>=O,O>=S,C>=G,G>=N,N>=R,B>=F,F>=L,L>=Q,A>=E,E>=I,I>=P. [1:23]
+			
+			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,V,Q,R,S,M,_),A>=B,B>=C,C>=D,E>=F,F>=G,G>=H,I>=L,L>=N,N>=O,Q>=R,R>=S. [1:23]
+			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,V,Q,R,S,M,_),I>=E,E>=A,Q>=L,L>=F,F>=B,R>=N,N>=G,G>=C,S>=O,O>=H,H>=D. [1:23]
+			
+  			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,V,M,_),D>=C,C>=B,B>=A,H>=G,G>=F,F>=E,O>=N,N>=L,L>=I,R>=Q,Q>=P. [1:23]
+			:~notBest(M), MaxList(V,_,_,_),GridPos(A,B,C,D,E,F,G,H,I,L,N,O,P,Q,R,V,M,_),O>=H,H>=D,R>=N,N>=G,G>=C,Q>=L,L>=F,F>=B,P>=I,I>=E,E>=A. [1:23]
+			
+
+
+			//TIENE IL VALORE MASSIMO AD UN ANGOLO 
+			
 			:~notBest(M), MaxList(V,_,_,_),GridPos(V,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,M,_). [1:24]
-			
 			:~notBest(M), MaxList(V,_,_,_),GridPos(_,_,_,V,_,_,_,_,_,_,_,_,_,_,_,_,M,_). [1:24]
-			
 			:~notBest(M), MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,V,_,_,_,M,_). [1:24]
-			
 			:~notBest(M), MaxList(V,_,_,_),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,V,M,_). [1:24]
 			
 			//QUANDO IL VALORE MASSIMO E' ALL'ANGOLO IL SUBMASSIMO LO SEGUE
@@ -188,16 +234,16 @@ public class Solver
 			//QUNDO MASSIMO, SUBMASSIMO,SUBSUBMASSIMO sono in posizione NE AGGIUSTIAMO ANCHE UN ALTRO
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(V,K,J,Y,_,_,_,_,_,_,_,_,_,_,_,_,M,_). [1:27]
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(V,_,_,_,K,_,_,_,J,_,_,_,Y,_,_,_,M,_). [1:27]
-			:~notBest(M), MaxList(V,K,J,Y),GridPos(V,_,_,_,_,K,_,_,_,_,J,_,_,_,_,Y,M,_). [1:27] //DIAGONALE
+	//		:~notBest(M), MaxList(V,K,J,Y),GridPos(V,_,_,_,_,K,_,_,_,_,J,_,_,_,_,Y,M,_). [1:27] //DIAGONALE
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(Y,J,K,V,_,_,_,_,_,_,_,_,_,_,_,_,M,_). [1:27]
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,V,_,_,_,K,_,_,_,J,_,_,_,Y,M,_). [1:27]
-		    :~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,V,_,_,K,_,_,J,_,_,Y,_,_,_,M,_). [1:27] //DIAGONALE
+	//	    :~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,V,_,_,K,_,_,J,_,_,Y,_,_,_,M,_). [1:27] //DIAGONALE
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,V,K,J,Y,M,_). [1:27]
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(Y,_,_,_,J,_,_,_,K,_,_,_,V,_,_,_,M,_). [1:27]
-			:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,y,_,_,J,_,_,K,_,_,V,_,_,_,M,_). [1:27] // DIAGONALE
+	//		:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,y,_,_,J,_,_,K,_,_,V,_,_,_,M,_). [1:27] // DIAGONALE
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,_,_,_,_,_,_,_,_,_,Y,J,K,V,M,_). [1:27]
 			:~notBest(M), MaxList(V,K,J,Y),GridPos(_,_,_,Y,_,_,_,J,_,_,_,K,_,_,_,V,M,_). [1:27]
-			:~notBest(M), MaxList(V,K,J,Y),GridPos(Y,_,_,_,_,J,_,_,_,_,K,_,_,_,_,V,M,_). [1:27] //DIAGONALE
+	//		:~notBest(M), MaxList(V,K,J,Y),GridPos(Y,_,_,_,_,J,_,_,_,_,K,_,_,_,_,V,M,_). [1:27] //DIAGONALE
 
 	
 	
@@ -228,23 +274,23 @@ public class Solver
 			
 			:~Best(M),Grid(_,_,FOUR,_,_,_,_,_,_,_,_,_,M,_). [FOUR:12] //Minimizza celle FOUR
 			
-			:~Best(M),Grid(_,_,_,EIGHT,_,_,_,_,_,_,_,_,M,_). [EIGHT:11]//Minimizza celle EIGHT
+			:~Best(M),Grid(_,_,_,EIGHT,_,_,_,_,_,_,_,_,M,_). [EIGHT:12]//Minimizza celle EIGHT
 			
-			:~Best(M),Grid(_,_,_,_,SIXTEEN,_,_,_,_,_,_,_,M,_). [SIXTEEN:10]//Minimizza celle SIXTEEN
+			:~Best(M),Grid(_,_,_,_,SIXTEEN,_,_,_,_,_,_,_,M,_). [SIXTEEN:12]//Minimizza celle SIXTEEN
 			
-			:~Best(M),Grid(_,_,_,_,_,THIRTYTWO,_,_,_,_,_,_,M,_). [THIRTYTWO:9] //Minimizza celle THIRTYTWO
+		//	:~Best(M),Grid(_,_,_,_,_,THIRTYTWO,_,_,_,_,_,_,M,_). [THIRTYTWO:9] //Minimizza celle THIRTYTWO
 			
-			:~Best(M),Grid(_,_,_,_,_,_,SIXTYFOUR,_,_,_,_,_,M,_). [SIXTYFOUR:8] //Minimizza celle SIXTYFOUR
+		//	:~Best(M),Grid(_,_,_,_,_,_,SIXTYFOUR,_,_,_,_,_,M,_). [SIXTYFOUR:8] //Minimizza celle SIXTYFOUR
 			
-			:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDERDTWENTYEIGHT:7] //Minimizza celle ONEHUNDREDTWENTYEIGHT
+		//	:~Best(M),Grid(_,_,_,_,_,_,_,ONEHUNDERDTWENTYEIGHT,_,_,_,_,M,_). [ONEHUNDERDTWENTYEIGHT:7] //Minimizza celle ONEHUNDREDTWENTYEIGHT
 			
-			:~Best(M),Grid(_,_,_,_,_,_,_,_,TWOHUNDREDFIFTYSIX,_,_,_,M,_). [TWOHUNDREDFIFTYSIX:5] //Minimizza celle TWOHUNDREDFIFTYSIX
+		//	:~Best(M),Grid(_,_,_,_,_,_,_,_,TWOHUNDREDFIFTYSIX,_,_,_,M,_). [TWOHUNDREDFIFTYSIX:5] //Minimizza celle TWOHUNDREDFIFTYSIX
 			
-			:~Best(M),Grid(_,_,_,_,_,_,_,_,_,FIVEHUNDREDTWELVE,_,_,M,_). [FIVEHUNDREDTWELVE:4] //Minimizza celle FIVEHUNDREDTWELVE
+		//	:~Best(M),Grid(_,_,_,_,_,_,_,_,_,FIVEHUNDREDTWELVE,_,_,M,_). [FIVEHUNDREDTWELVE:4] //Minimizza celle FIVEHUNDREDTWELVE
 	
-			:~notBest(M),Grid(_,_,_,_,_,_,_,_,_,_,_,_,_,V). [V:3] //Massimizza il Valore di Best
+	//		:~notBest(M),Grid(_,_,_,_,_,_,_,_,_,_,_,_,_,V). [V:3] //Massimizza il Valore di Best
 	
-			:~notBest(M),Grid(E,_,_,_,_,_,_,_,_,_,_,_,M,_). [E:3] //Minimizza celle EMPTY
+	//		:~notBest(M),Grid(E,_,_,_,_,_,_,_,_,_,_,_,M,_). [E:3] //Massimizza celle EMPTY
 		
 		
 		//:~Best(M),Grid(_,_,_,_,_,_,_,_,_,_,ONETHOUSANDTWENTYFOUR,_,M,_). [ONETHOUSANDTWENTYFOUR:3] //Minimizza celle ONETHOUSANDTWENTYFOUR
